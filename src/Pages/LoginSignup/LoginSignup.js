@@ -43,7 +43,7 @@ const LoginSignup = () => {
     dispatch(loginUser(formData))
       .unwrap()
       .then((data) => {
-        navigate("/");
+        navigate("/organization");
         toast.success("User has been logged in!");
       })
       .catch((error) => {

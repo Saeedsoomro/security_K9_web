@@ -32,7 +32,7 @@ const DogHandlerModal = ({
       name: data.dogHandlerName,
       organizationId: organization?._id,
       email: data.dogHandlerEmail,
-      phoneNumber: data.dogHandlerName,
+      phoneNumber: data.dogHandlerPhoneNumber,
       address: data.dogHandlerAddress,
       postalCode: data.dogHandlerPostalCode,
       province: data.dogHandlerProvince,
@@ -136,6 +136,28 @@ const DogHandlerModal = ({
                   />
                 )}
               />
+              <Controller
+                name="dogHandlerPhoneNumber"
+                control={control}
+                defaultValue={dogHandler?.phoneNumber || ""}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Phone No"
+                    variant="outlined"
+                    fullWidth
+                    error={errors.dogHandlerPhoneNumber ? true : false}
+                    helperText={
+                      errors.dogHandlerPhoneNumber
+                        ? "Phone Number is required"
+                        : ""
+                    }
+                    style={{ marginBottom: "16px" }}
+                  />
+                )}
+              />
+
               <Typography variant="subtitle1" style={{ marginBottom: "8px" }}>
                 Address
               </Typography>

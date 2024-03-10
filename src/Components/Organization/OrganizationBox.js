@@ -56,9 +56,9 @@ const OrganizationBox = () => {
   };
 
   const handleDgHanlerModalOpen = () => {
-    if (selectedOrganization) {
-      setOpenDogHandlerModal(true);
-    }
+    // if (selectedOrganization) {
+    setOpenDogHandlerModal(true);
+    // }
   };
 
   const handleSearchAreaModalClose = () => {
@@ -190,6 +190,7 @@ const OrganizationBox = () => {
   }
   async function deleteDogHandler(id) {
     if (selectedDogHandler) {
+      alert("Are you sure you want to delete this dog handler");
       try {
         const { data } = await axios.delete(`/api/v1/dogHandler/delete/${id}`);
         getDogHandlerList();
@@ -280,7 +281,7 @@ const OrganizationBox = () => {
                   overflowY: "auto",
                 }}
               >
-                {organizationList?.map((item) => (
+                {/* {organizationList?.map((item) => (
                   <ListItem
                     // selected={selectedDogHandler}
                     key={item._id}
@@ -302,7 +303,7 @@ const OrganizationBox = () => {
                       />
                     </ListItemIcon>
                   </ListItem>
-                ))}
+                ))} */}
               </Paper>
               <Box
                 style={{

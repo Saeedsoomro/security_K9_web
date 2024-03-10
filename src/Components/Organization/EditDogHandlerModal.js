@@ -59,6 +59,7 @@ const EditDogHandlerModal = ({ open, handleClose, dogHandler, getList }) => {
       reset({
         dogHandlerName: dogHandler.name || "",
         dogHandlerEmail: dogHandler.email || "",
+        dogHandlerPhoneNumber: dogHandler.phoneNumber || "",
         dogHandlerAddress: dogHandler.address || "",
         dogHandlerPostalCode: dogHandler.postalCode || "",
         dogHandlerProvince: dogHandler.province || "",
@@ -144,6 +145,27 @@ const EditDogHandlerModal = ({ open, handleClose, dogHandler, getList }) => {
                     error={errors.dogHandlerEmail ? true : false}
                     helperText={
                       errors.dogHandlerEmail ? "Email is required" : ""
+                    }
+                    style={{ marginBottom: "16px" }}
+                  />
+                )}
+              />
+              <Controller
+                name="dogHandlerPhoneNumber"
+                control={control}
+                defaultValue={dogHandler?.phoneNumber || ""}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Phone No"
+                    variant="outlined"
+                    fullWidth
+                    error={errors.dogHandlerPhoneNumber ? true : false}
+                    helperText={
+                      errors.dogHandlerPhoneNumber
+                        ? "Phone Number is required"
+                        : ""
                     }
                     style={{ marginBottom: "16px" }}
                   />

@@ -85,7 +85,7 @@ const EditInformationModal = ({ open, handleClose, organization, getList }) => {
             fontWeight={700}
             style={{ marginBottom: "16px" }}
           >
-            Add Information
+            Edit Information
           </Typography>
           <Divider />
           <Box
@@ -98,7 +98,7 @@ const EditInformationModal = ({ open, handleClose, organization, getList }) => {
           >
             <Box style={{ width: "45%" }}>
               <Typography variant="h6" style={{ marginBottom: "16px" }}>
-                Dog Handlers Details
+                Organization Details
               </Typography>
               <Controller
                 name="organizationName"

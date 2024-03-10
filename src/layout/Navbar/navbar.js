@@ -39,10 +39,10 @@ const Navbar = () => {
 
   if (user?.role === "superadmin") {
     menuItems = [
-      { text: "Home", link: "/" },
-      { text: "Security Guards", link: "/organization" },
+      // { text: "Home", link: "/" },
+      { link: "/organization" },
       // { text: "Security Services", link: "/securityareas" },
-      { text: "Dashboard", link: "/dashboard" },
+      // { text: "Dashboard", link: "/dashboard" },
     ];
   } else if (user?.role === "doghandler") {
     menuItems = [
@@ -149,13 +149,13 @@ const Navbar = () => {
                 {menuItems.map((item) => (
                   <ListItem key={item.text} onClick={toggleMenu}>
                     <Link href={item.link} sx={{ textDecoration: "none" }}>
-                      <ListItemText
+                      {/* <ListItemText
                         primary={item.text}
                         style={{
                           textDecoration: "none",
                           color: "white",
                         }}
-                      />
+                      /> */}
                     </Link>
                   </ListItem>
                 ))}

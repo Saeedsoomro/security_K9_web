@@ -42,14 +42,14 @@ function App() {
               </Layout>
             }
           />
-          <Route
+          {/* <Route
             path="/securityareas"
             element={
               <Layout>
                 <SecurityAreas />
               </Layout>
             }
-          />
+          /> */}
           <Route
             path="/login"
             element={
@@ -58,14 +58,14 @@ function App() {
               </Layout>
             }
           />
-          <Route
+          {/* <Route
             path="/dashboard"
             element={
               <Layout>
                 <Dashboard />
               </Layout>
             }
-          />
+          /> */}
         </Routes>
       </BrowserRouter>
       <ToastContainer />

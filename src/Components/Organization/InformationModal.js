@@ -85,7 +85,7 @@ const InformationModal = ({ open, handleClose, getList }) => {
           >
             <Box style={{ width: "45%" }}>
               <Typography variant="h6" style={{ marginBottom: "16px" }}>
-                Dog Handlers Details
+                Organization Details
               </Typography>
               <Controller
                 name="organizationName"
