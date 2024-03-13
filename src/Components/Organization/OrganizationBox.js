@@ -56,9 +56,9 @@ const OrganizationBox = () => {
   };
 
   const handleDgHanlerModalOpen = () => {
-    // if (selectedOrganization) {
-    setOpenDogHandlerModal(true);
-    // }
+    if (selectedOrganization) {
+      setOpenDogHandlerModal(true);
+    }
   };
 
   const handleSearchAreaModalClose = () => {
@@ -190,7 +190,6 @@ const OrganizationBox = () => {
   }
   async function deleteDogHandler(id) {
     if (selectedDogHandler) {
-      alert("Are you sure you want to delete this dog handler");
       try {
         const { data } = await axios.delete(`/api/v1/dogHandler/delete/${id}`);
         getDogHandlerList();
@@ -201,6 +200,22 @@ const OrganizationBox = () => {
       }
     }
   }
+
+  async function deleteOrganization(id) {
+    if (selectedOrganization) {
+      try {
+        const { data } = await axios.delete(
+          `/api/v1/organization/delete/${id}`
+        );
+        // getDogHandlerList();
+        toast.success("Organization has been deleted!");
+      } catch (error) {
+        toast.error(error.response.data?.message);
+        console.log(error);
+      }
+    }
+  }
+
   async function deleteObjectForm(id) {
     if (selectedObjectForm) {
       try {
@@ -219,7 +234,7 @@ const OrganizationBox = () => {
       const { data } = await axios.get(
         "/api/v1/organization/getAllOrganizations"
       );
-      console.log(data);
+      // console.log(data);
       setOrganizationList(data);
     } catch (error) {
       toast.error(error.response.data?.message);
@@ -281,7 +296,7 @@ const OrganizationBox = () => {
                   overflowY: "auto",
                 }}
               >
-                {/* {organizationList?.map((item) => (
+                {organizationList?.map((item) => (
                   <ListItem
                     // selected={selectedDogHandler}
                     key={item._id}
@@ -297,13 +312,18 @@ const OrganizationBox = () => {
                     <ListItemIcon>
                       <DeleteIcon
                         onClick={() => {
-                          deleteDogHandler(item._id);
+                          const confirmDelete = window.confirm(
+                            "Are you sure you want to delete this Organization?"
+                          );
+                          if (confirmDelete) {
+                            deleteOrganization(item._id);
+                          }
                         }}
                         sx={{ color: "red" }}
                       />
                     </ListItemIcon>
                   </ListItem>
-                ))} */}
+                ))}
               </Paper>
               <Box
                 style={{
@@ -414,7 +434,12 @@ const OrganizationBox = () => {
                     <ListItemIcon>
                       <DeleteIcon
                         onClick={() => {
-                          deleteDogHandler(item._id);
+                          const confirmDelete = window.confirm(
+                            "Are you sure you want to delete this dog handler?"
+                          );
+                          if (confirmDelete) {
+                            deleteDogHandler(item._id);
+                          }
                         }}
                         sx={{ color: "red" }}
                       />

@@ -5,7 +5,6 @@ import OrganizationBox from "../Components/Organization/OrganizationBox";
 const Organization = () => {
   return (
     <Fragment>
-      {/* <OrganizationHero /> */}
       <OrganizationBox />
     </Fragment>
   );

@@ -31,6 +31,7 @@ const AddSearchAreaModal = ({
     const formData = {
       name: data.dogHandlerName,
       dogHandler: dogHandlerId,
+      address: data.dogHandlerAddress,
       email: data.dogHandlerEmail,
       phone: data.dogHandlerName,
       recipient: {
@@ -39,6 +40,7 @@ const AddSearchAreaModal = ({
         phone: data.reporterNumber,
       },
       instructions: data.instructions,
+      status: data.dogHandlerStatus,
     };
     try {
       const { data } = await axios.post("/api/v1/searchareas/create", formData);
@@ -114,6 +116,27 @@ const AddSearchAreaModal = ({
                   />
                 )}
               />
+
+              <Controller
+                name="dogHandlerAddress"
+                control={control}
+                defaultValue={searchArea?.address || ""}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Address"
+                    variant="outlined"
+                    fullWidth
+                    error={errors.dogHandlerAddress ? true : false}
+                    helperText={
+                      errors.dogHandlerAddress ? "Address is required" : ""
+                    }
+                    style={{ marginBottom: "16px" }}
+                  />
+                )}
+              />
+
               <Controller
                 name="dogHandlerEmail"
                 control={control}
@@ -208,6 +231,25 @@ const AddSearchAreaModal = ({
                     helperText={
                       errors.reporterNumber ? "Number is required" : ""
                     }
+                  />
+                )}
+              />
+              <Controller
+                name="dogHandlerStatus"
+                control={control}
+                defaultValue={searchArea?.status || false}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Status"
+                    variant="outlined"
+                    fullWidth
+                    error={errors.dogHandlerStatus ? true : false}
+                    helperText={
+                      errors.dogHandlerStatus ? "Status is required" : ""
+                    }
+                    style={{ marginTop: "16px" }}
                   />
                 )}
               />
