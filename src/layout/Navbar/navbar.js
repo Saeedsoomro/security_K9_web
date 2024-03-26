@@ -178,11 +178,6 @@ const Navbar = () => {
                         Login
                       </Button>
                     </ListItem>
-                    <ListItem onClick={toggleMenu}>
-                      <Button sx={{ width: "150px" }} variant="contained">
-                        Register
-                      </Button>
-                    </ListItem>
                   </>
                 )}
               </List>
@@ -242,7 +237,6 @@ const Navbar = () => {
                 >
                   Login
                 </Button>
-                <Button variant="contained">Register</Button>
               </Box>
             )}
           </Hidden>
