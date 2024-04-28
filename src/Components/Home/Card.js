@@ -48,8 +48,9 @@ const CustomCard = () => {
           justifyContent: "space-evenly",
         }}
       >
-        {CardData.map((item) => (
+        {CardData.map((item, index) => (
           <Card
+            key={index}
             style={{
               width: "30%",
               display: "flex",

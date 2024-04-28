@@ -47,8 +47,8 @@ const Location = () => {
         justifyContent="center"
       >
         <Grid container spacing={3}>
-          {LocationData.map((item) => (
-            <Grid item xs={4} style={{}}>
+          {LocationData.map((item, index) => (
+            <Grid key={index} item xs={4} style={{}}>
               <Box
                 style={{
                   margin: "0.6vmax",

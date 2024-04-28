@@ -24,8 +24,9 @@ const SecurityServices = () => {
         Featured Security Services
       </Typography>
       <Box style={{ display: "flex", flexWrap: "wrap" }}>
-        {SecurityServiceData.map((item) => (
+        {SecurityServiceData.map((item, index) => (
           <Card
+            key={index}
             style={{
               width: "30%",
               height: "22vmax",

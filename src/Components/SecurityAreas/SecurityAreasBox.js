@@ -83,8 +83,12 @@ const SecurityAreasBox = () => {
                   boxSizing: "border-box",
                 }}
               >
-                {array.map((item) => (
-                  <Typography variant="body1" style={{ padding: "0.3vmax" }}>
+                {array.map((item, index) => (
+                  <Typography
+                    key={index}
+                    variant="body1"
+                    style={{ padding: "0.3vmax" }}
+                  >
                     {item.name}
                   </Typography>
                 ))}
@@ -165,8 +169,12 @@ const SecurityAreasBox = () => {
                   boxSizing: "border-box",
                 }}
               >
-                {array2.map((item) => (
-                  <Typography variant="body1" style={{ padding: "0.3vmax" }}>
+                {array2.map((item, index) => (
+                  <Typography
+                    key={index}
+                    variant="body1"
+                    style={{ padding: "0.3vmax" }}
+                  >
                     {item.name}
                   </Typography>
                 ))}

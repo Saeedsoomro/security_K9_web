@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Box,
@@ -7,10 +7,12 @@ import {
   Button,
   Divider,
   MenuItem,
+  IconButton,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const ObjectFormEditModal = ({
   open,
@@ -19,6 +21,21 @@ const ObjectFormEditModal = ({
   getList,
   objectForm,
 }) => {
+  const [checklistItems, setChecklistItems] = useState([]);
+  const [checklistName, setCheckListName] = useState("");
+  const [checklistInstruction, setCheckListInstructions] = useState("");
+  const [selectedChecklistItem, setSelectedChecklistItem] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    address: "",
+    postalCode: "",
+    province: "",
+    city: "",
+    checklist: "",
+    checklistItemName: "",
+    instructions: "",
+  });
   const {
     handleSubmit,
     control,
@@ -35,10 +52,14 @@ const ObjectFormEditModal = ({
       postalCode: data.postalCode,
       province: data.province,
       city: data.city,
-      checklist: data.checklist,
-      checklistItemName: data.checklistItemName,
-      instructions: data.instructions,
+      checklist: checklistItems.map((item) => {
+        return {
+          name: item.name,
+          instructions: item.instructions,
+        };
+      }),
     };
+
     try {
       const { data } = await axios.put(
         `/api/v1/formData/update/${objectForm._id}`,
@@ -56,6 +77,63 @@ const ObjectFormEditModal = ({
     handleClose();
   };
 
+  const handleAddChecklistItem = () => {
+    if (checklistName !== "") {
+      const newItem = {
+        _id: checklistItems.length + 1,
+        name: checklistName,
+        instructions: checklistInstruction,
+      };
+      console.log(newItem);
+      setChecklistItems([...checklistItems, newItem]);
+      setFormData({
+        ...formData,
+        checklistItemName: "",
+        instructions: "",
+      });
+    }
+  };
+
+  const handleEditChecklistItem = () => {
+    setChecklistItems((prev) => {
+      const index = prev.findIndex(
+        (item) => item._id === selectedChecklistItem
+      );
+      if (index !== -1) {
+        prev[index].name = checklistName;
+        prev[index].instructions = checklistInstruction;
+      }
+      return prev;
+    });
+    setCheckListInstructions("");
+    setCheckListName("");
+    setSelectedChecklistItem("");
+  };
+
+  const handleDeleteChecklistItem = () => {
+    if (selectedChecklistItem) {
+      setChecklistItems((prev) =>
+        prev.filter((item) => item._id !== selectedChecklistItem)
+      );
+      setCheckListInstructions("");
+      setCheckListName("");
+      setSelectedChecklistItem(null);
+    }
+  };
+
+  function handleSelectItem(id) {
+    const item = checklistItems.find((item) => item._id === id);
+    setCheckListInstructions(item.instructions);
+    setCheckListName(item.name);
+    setSelectedChecklistItem(id);
+  }
+
+  function handleRemoveItem() {
+    setCheckListInstructions("");
+    setCheckListName("");
+    setSelectedChecklistItem("");
+  }
+
   useEffect(() => {
     if (objectForm) {
       reset({
@@ -70,6 +148,7 @@ const ObjectFormEditModal = ({
         instructions: objectForm?.instructions || "",
       });
     }
+    setChecklistItems(objectForm?.checklist);
   }, [objectForm]);
   return (
     <div>
@@ -228,67 +307,83 @@ const ObjectFormEditModal = ({
                 <Typography variant="h6" style={{ marginBottom: "16px" }}>
                   Checklist
                 </Typography>
-                <Controller
-                  name="checklist"
-                  control={control}
+                <TextField
+                  select
+                  label="Checklist"
+                  variant="outlined"
+                  value={selectedChecklistItem}
+                  fullWidth
+                  onChange={(e) => handleSelectItem(e.target.value)}
+                  margin="normal"
+                >
+                  {checklistItems?.map((item) => (
+                    <MenuItem key={item._id} value={item._id}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  label="Checklist Item Name"
+                  variant="outlined"
+                  onChange={(e) => setCheckListName(e.target.value)}
+                  value={checklistName}
                   defaultValue=""
-                  rules={{ required: "Checklist is required" }}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      select
-                      label="Checklist"
-                      variant="outlined"
-                      fullWidth
-                      error={Boolean(errors.checklist)}
-                      helperText={
-                        errors.checklist ? errors.checklist.message : ""
-                      }
-                      margin="normal"
+                  fullWidth
+                  // error={Boolean(errors.checklistItemName)}
+                  helperText={
+                    errors.checklistItemName
+                      ? errors.checklistItemName.message
+                      : ""
+                  }
+                  style={{ marginBottom: "16px" }}
+                />
+                <TextField
+                  multiline
+                  rows={4}
+                  value={checklistInstruction}
+                  defaultValue=""
+                  onChange={(e) => setCheckListInstructions(e.target.value)}
+                  label="Instructions"
+                  variant="outlined"
+                  fullWidth
+                  style={{ marginBottom: "16px" }}
+                />
+                {!selectedChecklistItem ? (
+                  <Button variant="contained" onClick={handleAddChecklistItem}>
+                    Add New
+                  </Button>
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div>
+                      <Button
+                        variant="contained"
+                        onClick={handleEditChecklistItem}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        sx={{ color: "red", marginLeft: "4px" }}
+                        onClick={handleDeleteChecklistItem}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                    <IconButton
+                      variant="oultined"
+                      color="red"
+                      onClick={handleRemoveItem}
                     >
-                      <MenuItem value="Option 1">Option 1</MenuItem>
-                      <MenuItem value="Option 2">Option 2</MenuItem>
-                      <MenuItem value="Option 3">Option 3</MenuItem>
-                    </TextField>
-                  )}
-                />
-                <Controller
-                  name="checklistItemName"
-                  control={control}
-                  defaultValue=""
-                  rules={{ required: "Checklist Item Name is required" }}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Checklist Item Name"
-                      variant="outlined"
-                      fullWidth
-                      error={Boolean(errors.checklistItemName)}
-                      helperText={
-                        errors.checklistItemName
-                          ? errors.checklistItemName.message
-                          : ""
-                      }
-                      style={{ marginBottom: "16px" }}
-                    />
-                  )}
-                />
-                <Controller
-                  name="instructions"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      multiline
-                      rows={4}
-                      label="Instructions"
-                      variant="outlined"
-                      fullWidth
-                      style={{ marginBottom: "16px" }}
-                    />
-                  )}
-                />
+                      <RemoveIcon sx={{ color: "red" }} />
+                    </IconButton>
+                  </div>
+                )}
               </Box>
             </Box>
             <Divider />

@@ -197,8 +197,9 @@ const Navbar = () => {
                   gap: 2,
                 }}
               >
-                {menuItems.map((item) => (
+                {menuItems.map((item, index) => (
                   <Link
+                    key={index}
                     href={item.link}
                     sx={{
                       color: "#192d5c",
