@@ -32,6 +32,7 @@ const DogHandlerModal = ({
       name: data.dogHandlerName,
       organizationId: organization?._id,
       email: data.dogHandlerEmail,
+      password: data.dogHandlerPassword,
       phoneNumber: data.dogHandlerPhoneNumber,
       address: data.dogHandlerAddress,
       postalCode: data.dogHandlerPostalCode,
@@ -137,6 +138,26 @@ const DogHandlerModal = ({
                 )}
               />
               <Controller
+                name="dogHandlerPassword"
+                control={control}
+                defaultValue=""
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Password"
+                    type="password"
+                    variant="outlined"
+                    fullWidth
+                    error={errors.organizationPassword ? true : false}
+                    helperText={
+                      errors.organizationPassword ? "Password is required" : ""
+                    }
+                    style={{ marginBottom: "16px" }}
+                  />
+                )}
+              />
+              <Controller
                 name="dogHandlerPhoneNumber"
                 control={control}
                 defaultValue={dogHandler?.phoneNumber || ""}
@@ -180,6 +201,8 @@ const DogHandlerModal = ({
                   />
                 )}
               />
+            </Box>
+            <Box style={{ width: "45%" }}>
               <Controller
                 name="dogHandlerPostalCode"
                 control={control}
@@ -201,6 +224,7 @@ const DogHandlerModal = ({
                   />
                 )}
               />
+
               <Controller
                 name="dogHandlerProvince"
                 control={control}
@@ -236,8 +260,7 @@ const DogHandlerModal = ({
                   />
                 )}
               />
-            </Box>
-            <Box style={{ width: "45%" }}>
+
               <Typography variant="h6" style={{ marginBottom: "16px" }}>
                 Reporter Details
               </Typography>
