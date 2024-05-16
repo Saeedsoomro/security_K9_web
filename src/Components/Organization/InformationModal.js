@@ -11,6 +11,34 @@ import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-toastify";
 import axios from "axios";
 
+const ImageUploadField = ({ field, error }) => (
+  <div>
+    <input
+      name="organizationImage"
+      type="file"
+      accept="image/*"
+      onChange={(e) => field.onChange(e.target.files[0])}
+      style={{ display: "none" }}
+      id="image-upload-input"
+    />
+    <label htmlFor="image-upload-input">
+      <Typography variant="body1" component="span" color="primary">
+        Upload Image
+      </Typography>
+    </label>
+    {field.value && (
+      <Typography variant="body2" color="textSecondary">
+        {field.value.name}
+      </Typography>
+    )}
+    {error && (
+      <Typography variant="body2" color="error">
+        {error.message}
+      </Typography>
+    )}
+  </div>
+);
+
 const InformationModal = ({ open, handleClose, getList }) => {
   const [loading, setLoading] = useState(false);
   const {
@@ -24,6 +52,7 @@ const InformationModal = ({ open, handleClose, getList }) => {
     const formData = {
       name: data.organizationName,
       // organizationId: "65d50f062d04677868e3bbf4",
+      avatar: data.organizationImage[0],
       email: data.organizationEmail,
       password: data.organizationPassword,
       address: data.organizationAddress,
@@ -231,6 +260,15 @@ const InformationModal = ({ open, handleClose, getList }) => {
                         errors.organizationCity ? "City is required" : ""
                       }
                     />
+                  )}
+                />
+                <Controller
+                  name="organizationImage"
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: true }}
+                  render={({ field, fieldState: { error } }) => (
+                    <ImageUploadField field={field} error={error} />
                   )}
                 />
               </Box>
