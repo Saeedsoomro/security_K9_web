@@ -11,6 +11,15 @@ import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-toastify";
 import axios from "axios";
 
+// Utility function to convert file to base64
+const toBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
 const ImageUploadField = ({ field, error }) => (
   <div>
     <input
@@ -49,28 +58,43 @@ const InformationModal = ({ open, handleClose, getList }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const formData = {
-      name: data.organizationName,
-      // organizationId: "65d50f062d04677868e3bbf4",
-      avatar: data.organizationImage[0],
-      email: data.organizationEmail,
-      password: data.organizationPassword,
-      address: data.organizationAddress,
-      postalCode: data.organizationPostalCode,
-      province: data.organizationProvince,
-      city: data.organizationCity,
-    };
+    setLoading(true);
     try {
-      const { data } = await axios.post("/api/v1/organization/add", formData);
-      toast.success("organization has been added!");
+      // Debugging: Check if organizationImage is a File object
+      if (!(data.organizationImage instanceof File)) {
+        console.error(
+          "organizationImage is not a File object:",
+          data.organizationImage
+        );
+        toast.error("Please select a valid image file.");
+        setLoading(false);
+        return;
+      }
+
+      const base64Image = await toBase64(data.organizationImage);
+
+      const formData = {
+        name: data.organizationName,
+        avatar: base64Image,
+        email: data.organizationEmail,
+        password: data.organizationPassword,
+        address: data.organizationAddress,
+        postalCode: data.organizationPostalCode,
+        province: data.organizationProvince,
+        city: data.organizationCity,
+      };
+
+      const response = await axios.post("/api/v1/organization/add", formData);
+
+      toast.success("Organization has been added!");
       reset();
       getList();
       handleClose();
-      setLoading(false);
     } catch (error) {
-      toast.error(error.response.data?.message);
+      toast.error(error.response?.data?.message || "An error occurred");
+      console.error(error);
+    } finally {
       setLoading(false);
-      console.log(error);
     }
   };
 
@@ -272,41 +296,6 @@ const InformationModal = ({ open, handleClose, getList }) => {
                   )}
                 />
               </Box>
-              {/* <Box style={{ width: "45%" }}>
-              <Typography variant="h6" style={{ marginBottom: "16px" }}>
-                Reporter Details
-              </Typography>
-              <TextField
-                label="Name"
-                variant="outlined"
-                fullWidth
-                style={{ marginBottom: "16px" }}
-              />
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                style={{ marginBottom: "16px" }}
-              />
-              <Controller
-                name="reporterNumber"
-                control={control}
-                defaultValue=""
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Number"
-                    variant="outlined"
-                    fullWidth
-                    error={errors.reporterNumber ? true : false}
-                    helperText={
-                      errors.reporterNumber ? "Number is required" : ""
-                    }
-                  />
-                )}
-              />
-            </Box> */}
             </Box>
             <Divider />
             <Box
@@ -328,7 +317,7 @@ const InformationModal = ({ open, handleClose, getList }) => {
                 onClick={handleSubmit(onSubmit)}
                 color="primary"
               >
-                Save
+                {loading ? "Saving..." : "Save"}
               </Button>
             </Box>
           </Box>
